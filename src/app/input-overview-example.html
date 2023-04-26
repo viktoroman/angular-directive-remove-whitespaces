@@ -1,0 +1,51 @@
+<h1>DEMO</h1>
+<span>Both inputs have one Sync validator and one Async validater</span>
+<ul>
+  <li>Sync validator: Fires error when a text with 3 and less characters</li>
+  <li>Async validator: Has delay 1000ms! Fires error when a text = 'aaaaa'</li>
+</ul>
+
+<br />
+<mat-divider></mat-divider>
+
+<h3>Current "Remove whitespaces" directive</h3>
+<mat-form-field>
+  <input matInput [formControl]="control" bhRemoveWhitespacesOld />
+  <mat-error *ngIf="control.hasError('three')"> less the 3 letter! </mat-error>
+  <mat-error *ngIf="control.hasError('fiveA')"> value is 'aaaaa'! </mat-error>
+</mat-form-field>
+<ng-container
+  [ngTemplateOutlet]="controlStatus"
+  [ngTemplateOutletContext]="{control: control}"
+></ng-container>
+
+<br /><br /><br />
+<mat-divider></mat-divider>
+
+<h3>Proposed "Remove whitespaces" directive</h3>
+<mat-form-field>
+  <input matInput [formControl]="controlTwo" bhRemoveWhitespaces />
+  <mat-error *ngIf="controlTwo.hasError('three')">less the 3 letter!</mat-error>
+  <mat-error *ngIf="controlTwo.hasError('fiveA')">value is 'aaaaa'!</mat-error>
+</mat-form-field>
+<ng-container
+  [ngTemplateOutlet]="controlStatus"
+  [ngTemplateOutletContext]="{control: controlTwo}"
+></ng-container>
+
+<ng-template #controlStatus let-control="control">
+  <div style="display: flex; gap: 50px">
+    <section>
+      <p>Control state:</p>
+      <div>Status: "{{control.status}}"</div>
+      <div style="white-space: pre">Value: "{{control.value}}"</div>
+      <div>Length: {{control.value?.length}}</div>
+      <div>Errors: "{{control.errors | json}}"</div>
+    </section>
+
+    <section>
+      <p>Control values:</p>
+      <value-stack [value]="control.valueChanges | async"></value-stack>
+    </section>
+  </div>
+</ng-template>
